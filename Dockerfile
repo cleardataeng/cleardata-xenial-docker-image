@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 
-ENV terraform_url=https://releases.hashicorp.com/terraform/0.9.1/terraform_0.9.1_linux_amd64.zip
-ENV packer_url=https://releases.hashicorp.com/packer/0.12.3/packer_0.12.3_linux_amd64.zip
+ENV terraform_url=https://releases.hashicorp.com/terraform/0.9.5/terraform_0.9.5_linux_amd64.zip
+ENV packer_url=https://releases.hashicorp.com/packer/1.0.0/packer_1.0.0_linux_amd64.zip
 
 RUN \
     apt-get -q update && \
