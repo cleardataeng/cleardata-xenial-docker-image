@@ -19,6 +19,7 @@ RUN \
                                    python3-pip \
                                    python3-pytest \
                                    unzip \
+                                   uuid-runtime \
                                    && \
     /usr/bin/pip --no-cache-dir install awscli awsrequests testinfra && \
     /usr/bin/pip3 --no-cache-dir install awscli awsrequests testinfra && \
