@@ -34,4 +34,4 @@ RUN \
     unzip /root/\*.zip -d /usr/local/bin && \
     rm -f /root/terraform /root/terraform.zip /root/packer /root/packer.zip
 
-ADD aws-sudo.sh /usr/local/bin/aws-sudo.sh
+ADD aws-sudo/aws-sudo.sh /usr/local/bin/aws-sudo.sh
