@@ -1,7 +1,9 @@
 FROM ubuntu:16.04
 
-ENV terraform_url=https://releases.hashicorp.com/terraform/0.9.10/terraform_0.9.10_linux_amd64.zip
-ENV packer_url=https://releases.hashicorp.com/packer/1.0.0/packer_1.0.0_linux_amd64.zip
+ENV tf_ver=0.9.11
+ENV tf_sha256=804d31cfa5fee5c2b1bff7816b64f0e26b1d766ac347c67091adccc2626e16f3
+ENV packer_ver=1.0.4
+ENV packer_sha256=646da085cbcb8c666474d500a44d933df533cf4f1ff286193d67b51372c3c59e
 
 RUN \
     apt-get -q update && \
@@ -29,8 +31,11 @@ RUN \
     DEBIAN_FRONTEND=noninteractive apt-get -q install -y docker-ce && \
     /usr/bin/pip --no-cache-dir install awscli awsrequests testinfra && \
     /usr/bin/pip3 --no-cache-dir install awscli awsrequests testinfra && \
-    curl -o /root/terraform.zip $terraform_url && \
-    curl -o /root/packer.zip $packer_url && \
+    curl -o /root/terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/terraform_${tf_ver}_linux_amd64.zip && \
+    curl -o /root/packer.zip https://releases.hashicorp.com/packer/${packer_ver}/packer_${packer_ver}_linux_amd64.zip && \
+    echo "${packer_sha256} packer.zip" >> /root/sha256sums && \
+    echo "${tf_sha256} terraform.zip" >> /root/sha256sums && \
+    (cd /root; sha256sum -c sha256sums --strict) && \
     unzip /root/\*.zip -d /usr/local/bin && \
     rm -f /root/terraform /root/terraform.zip /root/packer /root/packer.zip
 
