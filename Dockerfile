@@ -4,6 +4,7 @@ ENV tf_ver=0.9.11
 ENV tf_sha256=804d31cfa5fee5c2b1bff7816b64f0e26b1d766ac347c67091adccc2626e16f3
 ENV packer_ver=1.0.4
 ENV packer_sha256=646da085cbcb8c666474d500a44d933df533cf4f1ff286193d67b51372c3c59e
+ENV GOPATH=/go
 
 RUN \
     apt-get -q update && \
@@ -13,6 +14,7 @@ RUN \
                                    ca-certificates \
                                    curl \
                                    dnsutils \
+                                   golang \
                                    iputils-ping \
                                    jq \
                                    npm \
@@ -38,6 +40,8 @@ RUN \
     echo "${tf_sha256} terraform.zip" >> /root/sha256sums && \
     (cd /root; sha256sum -c sha256sums --strict) && \
     unzip /root/\*.zip -d /usr/local/bin && \
-    rm -f /root/terraform /root/terraform.zip /root/packer /root/packer.zip
+    rm -f /root/terraform /root/terraform.zip /root/packer /root/packer.zip && \
+    mkdir ${GOPATH} && \
+    chmod 0777 ${GOPATH}
 
 ADD aws-sudo/aws-sudo.sh /usr/local/bin/aws-sudo.sh
