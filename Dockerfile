@@ -15,6 +15,7 @@ RUN \
                                    dnsutils \
                                    iputils-ping \
                                    jq \
+                                   npm \
                                    openssh-client \
                                    python-paramiko \
                                    python-pip \
