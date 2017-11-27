@@ -62,7 +62,9 @@ RUN apt-key add < /tmp/google.key && \
     rm -f /tmp/google.key && \
     echo "deb http://packages.cloud.google.com/apt cloud-sdk-xenial main" > /etc/apt/sources.list.d/google-sdk.list && \
     apt-get -q update && \
-    DEBIAN_FRONTEND=noninteractive apt-get -q install -y google-cloud-sdk
+    DEBIAN_FRONTEND=noninteractive apt-get -q install -y google-cloud-sdk && \
+    gcloud config set core/disable_usage_reporting true && \
+    gcloud config set component_manager/disable_update_check true
 
 # gcr docker credential helper
 ENV gcr_cred_helper_ver=1.4.1
