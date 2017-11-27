@@ -56,5 +56,22 @@ RUN mkdir ${GOPATH} && \
 # aws-sudo
 ADD aws-sudo/aws-sudo.sh /usr/local/bin/aws-sudo.sh
 
+# google-sdk
+ADD google.key /tmp/google.key
+RUN apt-key add < /tmp/google.key && \
+    rm -f /tmp/google.key && \
+    echo "deb http://packages.cloud.google.com/apt cloud-sdk-xenial main" > /etc/apt/sources.list.d/google-sdk.list && \
+    apt-get -q update && \
+    DEBIAN_FRONTEND=noninteractive apt-get -q install -y google-cloud-sdk
+
+# gcr docker credential helper
+ENV gcr_cred_helper_ver=1.4.1
+ENV gcr_cred_helper_sha256=c4f51ff78c25e2bfef38af0f38c6966806e25da7c5e43092c53a4d467fea4743
+RUN curl -L -o /root/gcrhelper.tar.gz https://github.com/GoogleCloudPlatform/docker-credential-gcr/releases/download/v${gcr_cred_helper_ver}/docker-credential-gcr_linux_amd64-${gcr_cred_helper_ver}.tar.gz && \
+    echo "${gcr_cred_helper_sha256} gcrhelper.tar.gz" > /root/sha256sums && \
+    (cd /root; sha256sum -c sha256sums --strict) && \
+    tar zxvf /root/gcrhelper.tar.gz -C /root && \
+    install /root/docker-credential-gcr /usr/local/bin
+
 # cleanup
-RUN rm -rf /root/* /tmp/*
+RUN rm -rf /root/* /tmp/* /google-cloud-sdk/.install/.backup
