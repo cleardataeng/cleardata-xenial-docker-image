@@ -32,13 +32,26 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8D81803C0EBFCD88 &&
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get -q install -y docker-ce
 
-# terraform
+# terraform 0.9 (default version)
 ENV tf_ver=0.9.11
 ENV tf_sha256=804d31cfa5fee5c2b1bff7816b64f0e26b1d766ac347c67091adccc2626e16f3
-RUN curl -L -o /root/terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/terraform_${tf_ver}_linux_amd64.zip && \
-    echo "${tf_sha256} terraform.zip" > /root/sha256sums && \
-    (cd /root; sha256sum -c sha256sums --strict) &&\
-    unzip /root/terraform.zip -d /usr/local/bin
+RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/terraform_${tf_ver}_linux_amd64.zip && \
+    echo "${tf_sha256} terraform.zip" > sha256sums && \
+    sha256sum -c sha256sums --strict && \
+    unzip terraform.zip && \
+    install terraform /usr/local/bin/terraform-0.9 && \
+    rm -rf terraform.zip terraform && \
+    ln -sf teraform-0.9 /usr/local/bin/terraform
+
+# terraform 0.11
+ENV tf_ver=0.11.1
+ENV tf_sha256=4e3d5e4c6a267e31e9f95d4c1b00f5a7be5a319698f0370825b459cb786e2f35
+RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/terraform_${tf_ver}_linux_amd64.zip && \
+    echo "${tf_sha256} terraform.zip" > sha256sums && \
+    sha256sum -c sha256sums --strict && \
+    unzip terraform.zip && \
+    install terraform /usr/local/bin/terraform-0.11 && \
+    rm -rf terraform.zip terraform
 
 # packer
 ENV packer_ver=1.0.4
