@@ -44,8 +44,8 @@ RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/
     ln -sf teraform-0.9 /usr/local/bin/terraform
 
 # terraform 0.11
-ENV tf_ver=0.11.1
-ENV tf_sha256=4e3d5e4c6a267e31e9f95d4c1b00f5a7be5a319698f0370825b459cb786e2f35
+ENV tf_ver=0.11.3
+ENV tf_sha256=6b8a7b83954597d36bbed23913dd51bc253906c612a070a21db373eab71b277b
 RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/terraform_${tf_ver}_linux_amd64.zip && \
     echo "${tf_sha256} terraform.zip" > sha256sums && \
     sha256sum -c sha256sums --strict && \
@@ -54,8 +54,8 @@ RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/
     rm -rf terraform.zip terraform
 
 # packer
-ENV packer_ver=1.0.4
-ENV packer_sha256=646da085cbcb8c666474d500a44d933df533cf4f1ff286193d67b51372c3c59e
+ENV packer_ver=1.2.0
+ENV packer_sha256=d1b0fcc4e66dfe4919c25752d028a4e4466921bf0e3f75be3bbf1c85082e8040
 RUN curl -L -o /root/packer.zip https://releases.hashicorp.com/packer/${packer_ver}/packer_${packer_ver}_linux_amd64.zip && \
     echo "${packer_sha256} packer.zip" > /root/sha256sums && \
     (cd /root; sha256sum -c sha256sums --strict) && \
