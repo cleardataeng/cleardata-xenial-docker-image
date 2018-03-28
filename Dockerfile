@@ -44,8 +44,8 @@ RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/
     ln -sf teraform-0.9 /usr/local/bin/terraform
 
 # terraform 0.11
-ENV tf_ver=0.11.3
-ENV tf_sha256=6b8a7b83954597d36bbed23913dd51bc253906c612a070a21db373eab71b277b
+ENV tf_ver=0.11.5
+ENV tf_sha256=131c440263382c79c7f783b70ff35cd1d03eb31c44f7738d153d95a0b8436ac9
 RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/terraform_${tf_ver}_linux_amd64.zip && \
     echo "${tf_sha256} terraform.zip" > sha256sums && \
     sha256sum -c sha256sums --strict && \
