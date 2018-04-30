@@ -23,8 +23,8 @@ RUN apt-get -q update && \
                                    uuid-runtime
 
 # common python modules
-RUN /usr/bin/pip --no-cache-dir install awscli awsrequests testinfra && \
-    /usr/bin/pip3 --no-cache-dir install awscli awsrequests testinfra
+RUN /usr/bin/pip --no-cache-dir install awscli awsrequests testinfra azure-cli && \
+    /usr/bin/pip3 --no-cache-dir install awscli awsrequests testinfra azure-cli
 
 # docker
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8D81803C0EBFCD88 && \
@@ -54,7 +54,7 @@ RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/
     rm -rf terraform.zip terraform
 
 # packer
-ENV packer_ver=1.2.0
+ENV packer_ver=1.2.3
 ENV packer_sha256=d1b0fcc4e66dfe4919c25752d028a4e4466921bf0e3f75be3bbf1c85082e8040
 RUN curl -L -o /root/packer.zip https://releases.hashicorp.com/packer/${packer_ver}/packer_${packer_ver}_linux_amd64.zip && \
     echo "${packer_sha256} packer.zip" > /root/sha256sums && \
