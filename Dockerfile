@@ -41,7 +41,7 @@ RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/
     unzip terraform.zip && \
     install terraform /usr/local/bin/terraform-0.9 && \
     rm -rf terraform.zip terraform && \
-    ln -sf teraform-0.9 /usr/local/bin/terraform
+    ln -sf terraform-0.9 /usr/local/bin/terraform
 
 # terraform 0.11
 ENV tf_ver=0.11.5
