@@ -94,5 +94,10 @@ RUN curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-c
     echo "$(curl -s https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-latest.md5) /usr/local/bin/ecs-cli" | md5sum -c - && \
     chmod +x /usr/local/bin/ecs-cli
 
+# node 9.x
+RUN curl -sL https://deb.nodesource.com/setup_9.x | bash && \
+    apt-get install -y nodejs &&\
+    npm install npm --global
+
 # cleanup
 RUN rm -rf /root/* /tmp/* /google-cloud-sdk/.install/.backup
