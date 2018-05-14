@@ -21,15 +21,20 @@ RUN apt-get -q update && \
                                    unzip \
                                    uuid-runtime
 
+# install and setup all of the apt keys / repos in the apt subdir
+# this way, a single apt-get update pulls in all of the external repos
+ADD apt/* /tmp/apt/
+RUN for i in /tmp/apt/*.key; do apt-key add $i; done && \
+    cp /tmp/apt/*.list /etc/apt/sources.list.d && \
+    rm -rf /tmp/apt && \
+    apt-get update
+
 # common python modules
 RUN /usr/bin/pip --no-cache-dir install awscli awsrequests testinfra && \
     /usr/bin/pip3 --no-cache-dir install awscli awsrequests testinfra
 
 # docker
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8D81803C0EBFCD88 && \
-    echo "deb https://download.docker.com/linux/ubuntu xenial stable" > /etc/apt/sources.list.d/docker.list && \
-    apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get -q install -y docker-ce
+RUN DEBIAN_FRONTEND=noninteractive apt-get -q install -y docker-ce
 
 # terraform 0.9 (default version)
 ENV tf_ver=0.9.11
@@ -69,12 +74,7 @@ RUN mkdir ${GOPATH} && \
 ADD aws-sudo/aws-sudo.sh /usr/local/bin/aws-sudo.sh
 
 # google-sdk
-ADD google.key /tmp/google.key
-RUN apt-key add < /tmp/google.key && \
-    rm -f /tmp/google.key && \
-    echo "deb http://packages.cloud.google.com/apt cloud-sdk-xenial main" > /etc/apt/sources.list.d/google-sdk.list && \
-    apt-get -q update && \
-    DEBIAN_FRONTEND=noninteractive apt-get -q install -y google-cloud-sdk \
+RUN DEBIAN_FRONTEND=noninteractive apt-get -q install -y google-cloud-sdk \
                                                          kubectl && \
     gcloud config set core/disable_usage_reporting true && \
     gcloud config set component_manager/disable_update_check true
@@ -94,14 +94,7 @@ RUN curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-c
     chmod +x /usr/local/bin/ecs-cli
 
 # node 9.x
-ADD nodesource.key yarnpkg.key /tmp/
-RUN apt-key add /tmp/nodesource.key && \
-    apt-key add /tmp/yarnpkg.key && \
-    rm -rf /tmp/nodesource.key /tmp/yarnpkg.key && \
-    echo "send-metrics = false" > /etc/npmrc && \
-    echo "deb https://deb.nodesource.com/node_9.x xenial main" > /etc/apt/sources.list.d/nodesource.list && \
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list && \
-    apt-get update && \
+RUN echo "send-metrics = false" > /etc/npmrc && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs yarn && \
     npm install npm --global
 
