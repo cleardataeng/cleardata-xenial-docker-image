@@ -11,7 +11,6 @@ RUN apt-get -q update && \
                                    golang \
                                    iputils-ping \
                                    jq \
-                                   npm \
                                    openssh-client \
                                    python-paramiko \
                                    python-pip \
@@ -95,8 +94,15 @@ RUN curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-c
     chmod +x /usr/local/bin/ecs-cli
 
 # node 9.x
-RUN curl -sL https://deb.nodesource.com/setup_9.x | bash && \
-    apt-get install -y nodejs &&\
+ADD nodesource.key yarnpkg.key /tmp/
+RUN apt-key add /tmp/nodesource.key && \
+    apt-key add /tmp/yarnpkg.key && \
+    rm -rf /tmp/nodesource.key /tmp/yarnpkg.key && \
+    echo "send-metrics = false" > /etc/npmrc && \
+    echo "deb https://deb.nodesource.com/node_9.x xenial main" > /etc/apt/sources.list.d/nodesource.list && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list && \
+    apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs yarn && \
     npm install npm --global
 
 # cleanup
