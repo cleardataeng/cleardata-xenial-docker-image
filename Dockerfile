@@ -80,8 +80,8 @@ RUN apt-key add < /tmp/google.key && \
     gcloud config set component_manager/disable_update_check true
 
 # gcr docker credential helper
-ENV gcr_cred_helper_ver=1.4.1
-ENV gcr_cred_helper_sha256=c4f51ff78c25e2bfef38af0f38c6966806e25da7c5e43092c53a4d467fea4743
+ENV gcr_cred_helper_ver=1.4.3
+ENV gcr_cred_helper_sha256=0630f744a5f42bf14e5986c959f32c5770a1f32d50ba055bd98353c7d18292d3
 RUN curl -L -o /root/gcrhelper.tar.gz https://github.com/GoogleCloudPlatform/docker-credential-gcr/releases/download/v${gcr_cred_helper_ver}/docker-credential-gcr_linux_amd64-${gcr_cred_helper_ver}.tar.gz && \
     echo "${gcr_cred_helper_sha256} gcrhelper.tar.gz" > /root/sha256sums && \
     (cd /root; sha256sum -c sha256sums --strict) && \
