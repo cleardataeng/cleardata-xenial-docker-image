@@ -11,6 +11,7 @@ RUN apt-get -q update && \
                                    golang \
                                    iputils-ping \
                                    jq \
+                                   libssl-dev \
                                    openssh-client \
                                    python-paramiko \
                                    python-pip \
