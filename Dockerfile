@@ -11,6 +11,7 @@ RUN apt-get -q update && \
                                    golang \
                                    iputils-ping \
                                    jq \
+                                   libssl-dev \
                                    openssh-client \
                                    python-paramiko \
                                    python-pip \
@@ -48,8 +49,8 @@ RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/
     ln -sf terraform-0.9 /usr/local/bin/terraform
 
 # terraform 0.11
-ENV tf_ver=0.11.5
-ENV tf_sha256=131c440263382c79c7f783b70ff35cd1d03eb31c44f7738d153d95a0b8436ac9
+ENV tf_ver=0.11.7
+ENV tf_sha256=6b8ce67647a59b2a3f70199c304abca0ddec0e49fd060944c26f666298e23418
 RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/terraform_${tf_ver}_linux_amd64.zip && \
     echo "${tf_sha256} terraform.zip" > sha256sums && \
     sha256sum -c sha256sums --strict && \
