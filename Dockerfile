@@ -1,4 +1,7 @@
 FROM docker:18.06.1-ce as docker-source
+FROM hashicorp/terraform:0.9.11 as terraform-0.9
+FROM hashicorp/terraform:0.11.14 as terraform-0.11
+FROM hashicorp/packer:1.4.4 as packer-source
 
 FROM ubuntu:16.04
 
@@ -40,33 +43,14 @@ RUN /usr/bin/pip --no-cache-dir install awscli awsrequests testinfra && \
 COPY --from-docker-source /usr/local/bin/docker /usr/local/bin/docker
 
 # terraform 0.9 (default version)
-ENV tf_ver=0.9.11
-ENV tf_sha256=804d31cfa5fee5c2b1bff7816b64f0e26b1d766ac347c67091adccc2626e16f3
-RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/terraform_${tf_ver}_linux_amd64.zip && \
-    echo "${tf_sha256} terraform.zip" > sha256sums && \
-    sha256sum -c sha256sums --strict && \
-    unzip terraform.zip && \
-    install terraform /usr/local/bin/terraform-0.9 && \
-    rm -rf terraform.zip terraform && \
-    ln -sf terraform-0.9 /usr/local/bin/terraform
+COPY --from=terraform-0.9 /bin/terraform /usr/local/bin/terraform
+RUN ln -s /usr/local/bin/terraform /usr/local/bin/terraform-0.9
 
 # terraform 0.11
-ENV tf_ver=0.11.7
-ENV tf_sha256=6b8ce67647a59b2a3f70199c304abca0ddec0e49fd060944c26f666298e23418
-RUN curl -L -o terraform.zip https://releases.hashicorp.com/terraform/${tf_ver}/terraform_${tf_ver}_linux_amd64.zip && \
-    echo "${tf_sha256} terraform.zip" > sha256sums && \
-    sha256sum -c sha256sums --strict && \
-    unzip terraform.zip && \
-    install terraform /usr/local/bin/terraform-0.11 && \
-    rm -rf terraform.zip terraform
+COPY --from=terraform-0.11 /bin/terraform /usr/local/bin/terraform-0.11
 
 # packer
-ENV packer_ver=1.2.3
-ENV packer_sha256=822fe76c2dfe699f187ef8c44537d10453a1545db620e40b345cf6991a690f7d
-RUN curl -L -o /root/packer.zip https://releases.hashicorp.com/packer/${packer_ver}/packer_${packer_ver}_linux_amd64.zip && \
-    echo "${packer_sha256} packer.zip" > /root/sha256sums && \
-    (cd /root; sha256sum -c sha256sums --strict) && \
-    unzip /root/packer.zip -d /usr/local/bin
+COPY --from=packer-source /bin/packer /usr/local/bin/packer
 
 # go config
 ENV GOPATH=/go
