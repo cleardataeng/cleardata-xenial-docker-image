@@ -1,3 +1,5 @@
+FROM docker:18.06.1-ce as docker-source
+
 FROM ubuntu:16.04
 
 # common initial setup
@@ -35,7 +37,7 @@ RUN /usr/bin/pip --no-cache-dir install awscli awsrequests testinfra && \
     /usr/bin/pip3 --no-cache-dir install awscli awsrequests testinfra
 
 # docker
-RUN DEBIAN_FRONTEND=noninteractive apt-get -q install -y docker-ce
+COPY --from-docker-source /usr/local/bin/docker /usr/local/bin/docker
 
 # terraform 0.9 (default version)
 ENV tf_ver=0.9.11
