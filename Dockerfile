@@ -40,7 +40,7 @@ RUN /usr/bin/pip --no-cache-dir install awscli awsrequests testinfra && \
     /usr/bin/pip3 --no-cache-dir install awscli awsrequests testinfra
 
 # docker
-COPY --from-docker-source /usr/local/bin/docker /usr/local/bin/docker
+COPY --from=docker-source /usr/local/bin/docker /usr/local/bin/docker
 
 # terraform 0.9 (default version)
 COPY --from=terraform-0.9 /bin/terraform /usr/local/bin/terraform
